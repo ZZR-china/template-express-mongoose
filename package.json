@@ -8,7 +8,15 @@
   },
   "author": "ZZR-china <2467254599@qq.com>",
   "license": "MIT",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "supervisor --harmony server.js",
+    "harmony": "node --harmony server.js"
+  },
   "dependencies": {
-    "koa": "^1.2.4"
+    "boom": "^4.2.0",
+    "hapi": "^15.2.0",
+    "hapi-plugin-websocket": "^0.9.4",
+    "lodash": "^4.16.6"
   }
 }
