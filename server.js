@@ -1,89 +1,79 @@
-var Boom          = require("boom")
-var HAPI          = require("hapi")
-var HAPIWebSocket = require("hapi-plugin-websocket")
+const Boom = require("boom");
+const HAPI = require("hapi");
+const HAPIWebSocket = require("hapi-plugin-websocket");
+const plugRoutes = require("hapi-router");
+const inert = require("inert");
+const good = require('good');
+const goodConsole = require('good-console');
 
-var server = new HAPI.Server()
-server.connection({ address: "127.0.0.1", port: 3000 })
-server.register(HAPIWebSocket, () => {
+const server = new HAPI.Server();
 
-    /*  plain REST route  */
-    server.route({
-        method: "POST", path: "/foo",
-        config: {
-            payload: { output: "data", parse: true, allow: "application/json" },
-        },
-        handler: (request, reply) => {
-            reply({ at: "foo", seen: request.payload })
-        }
-    })
+server.connection({ address: "127.0.0.1", port: 1234 });
 
-    /*  combined REST/WebSocket route  */
-    server.route({
-        method: "POST", path: "/bar",
-        config: {
-            payload: { output: "data", parse: true, allow: "application/json" },
-            plugins: { websocket: true }
-        },
-        handler: (request, reply) => {
-            if (request.websocket())
-                reply({ at: "bar", type: "websocket", seen: request.payload })
-            else
-                reply({ at: "bar", type: "rest", seen: request.payload })
-        }
-    })
+server.path(__dirname + './app/public/');
 
-    /*  exclusive WebSocket route  */
-    server.route({
-        method: "POST", path: "/baz",
-        config: {
-            plugins: { websocket: { only: true } }
-        },
-        handler: (request, reply) => {
-            reply({ at: "baz", seen: request.payload })
-        }
-    })
-
-    /*  full-featured exclusive WebSocket route  */
-    server.route({
-        method: "POST", path: "/quux",
-        config: {
-            plugins: {
-                websocket: {
-                    only: true,
-                    create: (wss) => {
-                        /* no-op */
-                    },
-                    connect: (wss, ws) => {
-                        ws.send(JSON.stringify({ cmd: "WELCOME" }))
-                        this.to = setInterval(() => {
-                            ws.send(JSON.stringify({ cmd: "PING" }))
-                        }, 5000)
-                    },
-                    disconnect: (wss, ws) => {
-                        if (this.to !== null) {
-                            clearTimeout(this.to)
-                            this.to = null
-                        }
-                    }
+server.register([
+        HAPIWebSocket,
+        inert, {
+            register: good,
+            options: {
+                ops: {
+                    interval: 1000
+                },
+                reporters: {
+                    console: [{
+                        module: 'good-squeeze',
+                        name: 'Squeeze',
+                        args: [{
+                            log: '*',
+                            response: '*'
+                        }]
+                    }, {
+                        module: 'good-console'
+                    }, 'stdout'],
+                    file: [{
+                        module: 'good-squeeze',
+                        name: 'Squeeze',
+                        args: [{
+                            ops: '*'
+                        }]
+                    }, {
+                        module: 'good-squeeze',
+                        name: 'SafeJson'
+                    }, {
+                        module: 'good-file',
+                        args: ['./logs/access.log']
+                    }],
+                    http: [{
+                        module: 'good-squeeze',
+                        name: 'Squeeze',
+                        args: [{
+                            error: '*'
+                        }]
+                    }, {
+                        module: 'good-http',
+                        args: ['http://prod.logs:3000', {
+                            wreck: {
+                                headers: {
+                                    'x-api-key': 12345
+                                }
+                            }
+                        }]
+                    }]
                 }
             }
-        },
-        handler: (request, reply) => {
-            if (typeof request.payload.cmd !== "string")
-                return reply(Boom.badRequest("invalid request"))
-            if (request.payload.cmd === "PING")
-                return reply({ result: "PONG" })
-            else if (request.payload.cmd === "AWAKE-ALL") {
-                var wss = request.websocket().wss
-                wss.clients.forEach((ws) => {
-                    ws.send(JSON.stringify({ cmd: "AWAKE" }))
-                })
-                return reply().code(204)
+        }, {
+            register: plugRoutes,
+            options: {
+                routes: 'app/route/*.js'
             }
-            else
-                return reply(Boom.badRequest("unknown command"))
         }
+    ],
+    (err) => {
+        server.start((err) => {
+            if (err) {
+                throw err;
+            }
+            console.log(`Server running at: ${server.info.uri}`);
+        });
     })
-
-    server.start()
-})

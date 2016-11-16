@@ -20,3 +20,7 @@ bin-release/
 
 node_modules/
 view
+
+./logs/access.log
+
+yarn-error.log
