@@ -21,4 +21,14 @@ bin-release/
 node_modules/
 view
 Contact GitHub API Training Shop Blog About
-© 2016 GitHub, Inc. Terms
+© 2016 GitHub, Inc. Terms.avoscloud/
+
+start.sh
+.avoscloud
+.leancloud
+
+.avoscloud/
+
+./config/secret.js
+../config/secret.js
+/config/secret.js

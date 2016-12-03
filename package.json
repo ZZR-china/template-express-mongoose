@@ -1,0 +1,40 @@
+{
+  "name": "ticket",
+  "version": "1.0.0",
+  "description": "ticket app",
+  "main": "server.js",
+  "repository": {
+    "url": "git@github.com:ZZR-china/tikect.git",
+    "type": "git"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "node",
+    "LeanCloud",
+    "LeanEngine",
+    "express"
+  ],
+  "engines": {
+    "node": "6.x"
+  },
+  "dependencies": {
+    "async": "^2.1.4",
+    "compression": "^1.6.2",
+    "cookie-parser": "^1.4.3",
+    "express": "4.12.3",
+    "glob": "^7.1.1",
+    "leanengine": "1.2.2",
+    "lodash": "^4.16.4",
+    "moment": "^2.15.1",
+    "moment-timezone": "^0.5.6",
+    "mongoose": "^4.6.4",
+    "request": "^2.75.0",
+    "websocket": "^1.0.23",
+    "wechat": "^2.0.3",
+    "wechat-api": "^1.32.0"
+  },
+  "author": "ZZR-china <2467254599@qq.com>",
+  "license": "MIT"
+}
