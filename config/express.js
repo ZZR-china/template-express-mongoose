@@ -5,7 +5,6 @@ var express = require('express'),
     path = require('path'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
-    AV = require('leanengine'),
     glob = require('glob'),
     http = require('http'),
     async = require('async');
@@ -16,7 +15,6 @@ var models,
 module.exports = function(app, config) {
     app.use(express.static(config.root + '/app/view/static'));
     app.use(timeout('15s'));
-    app.use(AV.express());
     app.use(compression());
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
