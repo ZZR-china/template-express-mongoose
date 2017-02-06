@@ -5,6 +5,8 @@ bin-release/
 [Oo]bj/ # FlashDevelop obj
 [Bb]in/ # FlashDevelop bin
 
+desktop.ini
+
 # Other files and folders
 .settings/
 
@@ -18,17 +20,12 @@ bin-release/
 # should NOT be excluded as they contain compiler settings and other important
 # information for Eclipse / Flash Builder.
 
+node_modules
 node_modules/
 view
-Contact GitHub API Training Shop Blog About
-© 2016 GitHub, Inc. Terms.avoscloud/
 
-start.sh
-.avoscloud
-.leancloud
+test/
 
-.avoscloud/
+test/fixtures/*
 
-./config/secret.js
-../config/secret.js
-/config/secret.js
+dist/
