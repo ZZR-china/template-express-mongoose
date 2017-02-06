@@ -26,5 +26,11 @@ export default {
       username: Joi.string().required(),
       password: Joi.string().required()
     }
+  },
+  // POST /api/auth
+  auth: {
+    body: {
+      username: Joi.string().required()
+    }
   }
 };

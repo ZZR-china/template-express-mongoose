@@ -1,12 +1,8 @@
-# foowala-pos-service
+# chechuang_backend
+back end for chechuang
 
-```
+express
 
-yarn install
+gulp
 
-yarn run dev
-
-yarn run build
-
-```
-when you run **yarn run dev**, you will find your app is running at locahost:9027.
+websocket

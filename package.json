@@ -1,59 +1,74 @@
 {
-  "name": "foowala-pos",
-  "version": "1.1.0",
-  "description": "foowala pos backend",
-  "main": "index.js",
-  "author": "foowala",
-  "license": "MIT",
-  "keywords": [
-    "express",
-    "mongo"
-  ],
+  "name": "template-express-mongoose",
+  "version": "1.0.0",
+  "description": "template-express-mongoose",
+  "main": "server.js",
   "repository": {
-    "type": "git",
-    "url": "git@github.com:foowala/foowala-pos-service.git"
+    "url": "git@github.com:ZZR-china/template-express-mongoose.git",
+    "type": "git"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node dist/server.js",
-    "dev": "cross-env NODE_ENV=dev gulp",
-    "build": "gulp build"
+    "start": "gulp serve",
+    "dev": "gulp serve",
+    "build": "gulp"
+  },
+  "keywords": [
+    "node",
+    "express"
+  ],
+  "engines": {
+    "node": ">=6.x"
   },
   "dependencies": {
     "async": "^2.1.4",
-    "babel-preset-es2015": "^6.18.0",
     "bluebird": "^3.4.7",
     "co": "^4.6.0",
-    "express": "^4.14.1",
+    "compression": "^1.6.2",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.1",
+    "debug": "^2.3.3",
+    "express": "4.12.3",
+    "express-jwt": "^5.1.0",
+    "express-validation": "^1.0.1",
+    "express-winston": "^2.1.0",
     "glob": "^7.1.1",
-    "gulp-babel": "^6.1.2",
-    "inert": "^4.0.4",
-    "joi": "^10.1.0",
+    "helmet": "^3.1.0",
+    "http-status": "^0.2.3",
+    "joi": "9.0.4",
     "jsonwebtoken": "^7.2.1",
-    "lodash": "^4.17.3",
-    "lout": "^9.2.0",
-    "moment": "^2.17.1",
-    "moment-timezone": "^0.5.11",
-    "mongoose": "^4.7.5",
-    "request": "^2.79.0"
+    "leanengine": "1.2.2",
+    "lodash": "^4.16.4",
+    "method-override": "^2.3.7",
+    "moment": "^2.15.1",
+    "moment-timezone": "^0.5.6",
+    "mongoose": "^4.6.4",
+    "morgan": "^1.7.0",
+    "qr-image": "^3.1.0",
+    "request": "^2.75.0",
+    "serve-favicon": "^2.3.2",
+    "svg-captcha": "^1.1.2",
+    "winston": "^2.3.0"
   },
   "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.20.0",
     "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-plugin-transform-runtime": "^6.15.0",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-stage-2": "^6.18.0",
-    "cross-env": "^3.1.4",
-    "debug": "^2.5.2",
-    "del": "^2.2.2",
+    "chai": "^3.5.0",
+    "cross-env": "^3.1.3",
+    "eslint": "^3.12.0",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
     "gulp-load-plugins": "^1.4.0",
     "gulp-newer": "^1.3.0",
     "gulp-nodemon": "^2.2.1",
     "gulp-sourcemaps": "^1.9.1",
-    "run-sequence": "^1.2.2",
-    "vision": "^4.1.1"
+    "gulp-util": "^3.0.7",
+    "run-sequence": "^1.2.2"
   },
+  "author": "ZZR-china <2467254599@qq.com>",
+  "license": "MIT",
   "babel": {
     "presets": [
       "es2015",
