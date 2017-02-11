@@ -5,10 +5,23 @@ bin-release/
 [Oo]bj/ # FlashDevelop obj
 [Bb]in/ # FlashDevelop bin
 
+<<<<<<< HEAD
+=======
+# Other files and folders
+.settings/
+
+# Executables
+*.swf
+*.air
+*.ipa
+*.apk
+
+>>>>>>> 90a219003416972af4c3d21fed8999a5d1e1958f
 # Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
 # should NOT be excluded as they contain compiler settings and other important
 # information for Eclipse / Flash Builder.
 
+<<<<<<< HEAD
 start.sh
 .leancloud
 .avoscloud/
@@ -55,3 +68,19 @@ node_modules
 .avoscloud/
 
 dist/
+=======
+node_modules/
+view
+Contact GitHub API Training Shop Blog About
+© 2016 GitHub, Inc. Terms.avoscloud/
+
+start.sh
+.avoscloud
+.leancloud
+
+.avoscloud/
+
+./config/secret.js
+../config/secret.js
+/config/secret.js
+>>>>>>> 90a219003416972af4c3d21fed8999a5d1e1958f
