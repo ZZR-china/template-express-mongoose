@@ -24,4 +24,4 @@ topic_Schema.statics = {
     }
 }
 
-mongoose.model('topic', topic_Schema, 'topic');
+export default mongoose.model('topic', topic_Schema, 'topic');

@@ -6,10 +6,10 @@ import config from '../../config/env';
 const router = express.Router();
 
 router.route('/')
-      .get(userCtrl.getAll)
+      .get(userCtrl.index)
       .post(userCtrl.create);
 
-router.route('/:user')
+router.route('/:_id')
       .get(userCtrl.show)
       .put(userCtrl.update)
       .delete(userCtrl.destroy);

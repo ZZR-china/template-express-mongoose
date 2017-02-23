@@ -31,29 +31,42 @@ app.use(methodOverride());
 app.use(favicon(config.rootPath + '/love.ico'));
 // secure apps by setting various HTTP headers
 app.use(helmet());
-
 // enable CORS - Cross Origin Resource Sharing
-app.use(cors());
-app.disable('x-powered-by');
-app.use(expressJwt({
-  secret: config.jwtSecret,
-  getToken (req) {
-    if (req.headers.authorization) {
-        return req.headers.authorization;
-    } else if (req.query && req.query.token) {
-      return req.query.token;
-    }
-    return null;
+let corsOptions={};
+if (config.env === 'production') {
+  corsOptions = {
+    origin: function (origin, callback) {
+      const whitelist = config.whitelist;
+      const originIsWhitelisted = whitelist.indexOf(origin) !== -1
+      callback(originIsWhitelisted ? null : 'Bad Request', originIsWhitelisted)
+    },
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
   }
-}).unless({path: [
-  '/captcha/image',
-  {url: '/', methods: ['GET']},
-  {url: /^(\/qr)+(\/url)+(\i)*/, methods: ['GET']},
-  {url: /^(\/qr)+(\/url)*(\?)+(\w)*(\=)*(\w)*/, methods: ['GET']},
-  {url: '/auth/random', methods: ['GET']},
-  {url: '/auth', methods: ['GET', 'POST']},
-  {url: /\/v1\/sms/i, methods: ['GET']}
-]}));
+}
+app.use(cors(corsOptions));
+app.disable('x-powered-by');
+
+//express jwt config
+
+// app.use(expressJwt({
+//   secret: config.jwtSecret,
+//   getToken (req) {
+//     if (req.headers.authorization) {
+//         return req.headers.authorization;
+//     } else if (req.query && req.query.token) {
+//       return req.query.token;
+//     }
+//     return null;
+//   }
+// }).unless({path: [
+//   '/captcha/image',
+//   {url: '/', methods: ['GET']},
+//   {url: /^(\/qr)+(\/url)+(\i)*/, methods: ['GET']},
+//   {url: /^(\/qr)+(\/url)*(\?)+(\w)*(\=)*(\w)*/, methods: ['GET']},
+//   {url: '/auth/random', methods: ['GET']},
+//   {url: '/auth', methods: ['GET', 'POST']},
+//   {url: /\/v1\/sms/i, methods: ['GET']}
+// ]}));
 
 // enable detailed API logging in dev env
 if (config.env === 'development') {
@@ -67,7 +80,7 @@ if (config.env === 'development') {
   }));
 }
 
-// mount all routes on /v1 path
+// mount all routes on / path
 app.use('/', routes);
 
 // if error is not an instanceOf APIError, convert it.
@@ -90,18 +103,13 @@ app.use((req, res, next) => {
   return next(err);
 });
 
-// log error in winston transports except when executing test suite
-if (config.env !== 'test') {
-  app.use(expressWinston.errorLogger({
-    winstonInstance
-  }));
-}
 
 // error handler, send stacktrace only during development
 app.use((err, req, res, next) => // eslint-disable-line no-unused-vars
   res.status(err.status).json({
     message: err.isPublic ? err.message : httpStatus[err.status],
-    stack: config.env === 'development' ? err.stack : {}
+    request: req.url,
+    // stack: config.env === 'development' ? err.stack : {}
   })
 );
 

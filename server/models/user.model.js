@@ -7,7 +7,6 @@ const crypto = require('crypto');
 const Schema = mongoose.Schema;
 const oAuthTypes = [
     'github',
-    'twitter',
     'facebook',
     'google',
     'linkedin'
@@ -25,7 +24,6 @@ const UserSchema = new Schema({
     hashed_password: { type: String, default: '' },
     salt: { type: String, default: '' },
     authToken: { type: String, default: '' },
-    twitter: {},
     github: {},
     google: {}
 });
@@ -67,7 +65,7 @@ UserSchema.path('username').validate(function(username) {
 
 UserSchema.path('hashed_password').validate(function(hashed_password) {
     if (this.skipValidation()) return true;
-    return hashed_password.length && this._password.length;
+    return hashed_password.length;
 }, 'Password cannot be blank');
 
 
@@ -76,13 +74,7 @@ UserSchema.path('hashed_password').validate(function(hashed_password) {
  */
 
 UserSchema.pre('save', function(next) {
-    if (!this.isNew) return next();
-
-    if (!validatePresenceOf(this.password) && !this.skipValidation()) {
-        next(new Error('Invalid password'));
-    } else {
-        next();
-    }
+    next()
 });
 
 /**
@@ -162,7 +154,21 @@ UserSchema.statics = {
         return this.findOne(options.criteria)
             .select(options.select)
             .exec(cb);
+    },
+
+    /**
+     * List users in descending order of 'createdAt' timestamp.
+     * @param {number} skip - Number of users to be skipped.
+     * @param {number} limit - Limit number of users to be returned.
+     * @returns {Promise<User[]>}
+     */
+    list({ query = {}, fliter = null, skip = 0, limit = 50 } = {}) {
+        return this.find(query, fliter)
+            .sort({ timestamp: -1 })
+            .skip(skip)
+            .limit(limit)
+            .exec();
     }
 };
 
-mongoose.model('User', UserSchema);
+export default mongoose.model('User', UserSchema);
